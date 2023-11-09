@@ -1,0 +1,22 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{6C01B2C3-436B-1133-40FC-6DA93CA19EC8}",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "GAD174_Project3",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "ModelingToolsEditorMode",
+			"Enabled": true,
+			"TargetAllowList": [
+				"Editor"
+			]
+		}
+	]
+}
