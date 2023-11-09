@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class GAD174_Project3Target : TargetRules
 {
-	public GAD174_Project3Target(TargetInfo Target) : base(Target)
+	public GAD174_Project3Target( TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Game;
 		DefaultBuildSettings = BuildSettingsVersion.V2;

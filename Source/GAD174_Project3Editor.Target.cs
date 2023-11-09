@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class GAD174_Project3EditorTarget : TargetRules
 {
-	public GAD174_Project3EditorTarget(TargetInfo Target) : base(Target)
+	public GAD174_Project3EditorTarget( TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Editor;
 		DefaultBuildSettings = BuildSettingsVersion.V2;
