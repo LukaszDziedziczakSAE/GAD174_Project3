@@ -16,6 +16,14 @@ void AArenaCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	// Set Health to Max
+	Health = MaxHealth;
+
+	// Spawn Weapon
+	if (WeaponClass != nullptr)
+	{
+		SpawnWeapon(WeaponClass);
+	}
 }
 
 // Called every frame
@@ -66,9 +74,16 @@ void AArenaCharacter::AttackComplete()
 	Attacking = false;
 }
 
+void AArenaCharacter::SpawnWeapon(TSubclassOf<AArenaWeapon> weaponClass)
+{
+	Weapon = GetWorld()->SpawnActor<AArenaWeapon>(weaponClass);
+	Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
+	Weapon->SetOwner(this);
+}
+
 void AArenaCharacter::Attack()
 {
-	if (Blocking) return;
+	if (Attacking || Blocking) return;
 	//UE_LOG(LogTemp, Warning, TEXT("Attack pressed"));
 	Attacking = true;
 }

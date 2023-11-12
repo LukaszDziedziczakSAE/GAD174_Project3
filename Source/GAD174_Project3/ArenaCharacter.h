@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "ArenaWeapon.h"
 #include "ArenaCharacter.generated.h"
 
 UCLASS()
@@ -45,6 +46,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void AttackComplete();
 
+	UFUNCTION(BlueprintCallable)
+	void SpawnWeapon(TSubclassOf<AArenaWeapon> weaponClass);
+
 private:
 	void Attack();
 	void BlockStart();
@@ -70,4 +74,10 @@ private:
 	// Is the player pressing the blocking button
 	UPROPERTY(VisibleAnywhere)
 	bool Attacking;
+
+	UPROPERTY(VisibleAnywhere)
+	AArenaWeapon* Weapon;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AArenaWeapon> WeaponClass;
 };
