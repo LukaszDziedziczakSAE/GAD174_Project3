@@ -42,7 +42,15 @@ void AArenaWeapon::HitDetect()
 	TArray< TEnumAsByte< EObjectTypeQuery >> ObjectTypesArray;
 	ObjectTypesArray.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_GameTraceChannel1));
 	TArray< AActor* > ActorsToIgnore;
-	EDrawDebugTrace::Type DrawDebugType = EDrawDebugTrace::ForDuration;
+	EDrawDebugTrace::Type DrawDebugType;
+	if (ShowAttackDebug)
+	{
+		DrawDebugType = EDrawDebugTrace::ForDuration;
+	}
+	else
+	{
+		DrawDebugType = EDrawDebugTrace::None;
+	}
 	FHitResult HitResult;
 	UKismetSystemLibrary::SphereTraceSingleForObjects(this, GetTopPosition(), GetBottomPosition(), 10, ObjectTypesArray, false, ActorsToIgnore, DrawDebugType, HitResult, true, FLinearColor::Red, FLinearColor::Green, 5.0);
 }

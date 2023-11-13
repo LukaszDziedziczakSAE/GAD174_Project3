@@ -83,4 +83,7 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AArenaWeapon> WeaponClass;
+
+	UPROPERTY(EditDefaultsOnly)
+	UAnimMontage* AttackMontage;
 };

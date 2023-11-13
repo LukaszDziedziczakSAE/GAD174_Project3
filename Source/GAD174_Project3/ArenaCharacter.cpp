@@ -72,6 +72,7 @@ bool AArenaCharacter::GetAttacking()
 void AArenaCharacter::AttackComplete()
 {
 	Attacking = false;
+	//UE_LOG(LogTemp, Warning, TEXT("Attack complete"));
 }
 
 void AArenaCharacter::SpawnWeapon(TSubclassOf<AArenaWeapon> weaponClass)
@@ -89,8 +90,14 @@ AArenaWeapon* AArenaCharacter::GetWeapon()
 void AArenaCharacter::Attack()
 {
 	if (Attacking || Blocking) return;
-	//UE_LOG(LogTemp, Warning, TEXT("Attack pressed"));
 	Attacking = true;
+
+	if (GetMesh()->GetAnimInstance()->Montage_Play(AttackMontage) == 0)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Failed to play montage"));
+	};
+
+	//UE_LOG(LogTemp, Warning, TEXT("Attack pressed"));
 }
 
 void AArenaCharacter::BlockStart()
@@ -101,6 +108,7 @@ void AArenaCharacter::BlockStart()
 
 void AArenaCharacter::BlockStop()
 {
+	//if (Attacking || Blocking) return;
 	//UE_LOG(LogTemp, Warning, TEXT("Block ended"));
 	Blocking = false;
 }
