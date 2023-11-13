@@ -81,6 +81,11 @@ void AArenaCharacter::SpawnWeapon(TSubclassOf<AArenaWeapon> weaponClass)
 	Weapon->SetOwner(this);
 }
 
+AArenaWeapon* AArenaCharacter::GetWeapon()
+{
+	return Weapon;
+}
+
 void AArenaCharacter::Attack()
 {
 	if (Attacking || Blocking) return;

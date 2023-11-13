@@ -2,6 +2,7 @@
 
 
 #include "ArenaWeapon.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 // Sets default values
 AArenaWeapon::AArenaWeapon()
@@ -12,13 +13,14 @@ AArenaWeapon::AArenaWeapon()
 	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	SetRootComponent(Root);
 
-	Collider = CreateDefaultSubobject<UBoxComponent>(TEXT("Collider"));
-	Collider->SetupAttachment(Root);
-
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	Mesh->SetupAttachment(Root);
 
-	Collider->OnComponentBeginOverlap.AddDynamic(this, &AArenaWeapon::OnOverlapBegin);
+	WeaponTop = CreateDefaultSubobject<USceneComponent>(TEXT("Weapon Top"));
+	WeaponTop->SetupAttachment(Root);
+
+	WeaponBottom = CreateDefaultSubobject<USceneComponent>(TEXT("Weapon Bottom"));
+	WeaponBottom->SetupAttachment(Root);
 }
 
 // Called when the game starts or when spawned
@@ -28,15 +30,30 @@ void AArenaWeapon::BeginPlay()
 	
 }
 
-void AArenaWeapon::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	UE_LOG(LogTemp, Warning, TEXT("Overlap"));
-}
-
 // Called every frame
 void AArenaWeapon::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AArenaWeapon::HitDetect()
+{
+	TArray< TEnumAsByte< EObjectTypeQuery >> ObjectTypesArray;
+	ObjectTypesArray.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_GameTraceChannel1));
+	TArray< AActor* > ActorsToIgnore;
+	EDrawDebugTrace::Type DrawDebugType = EDrawDebugTrace::ForDuration;
+	FHitResult HitResult;
+	UKismetSystemLibrary::SphereTraceSingleForObjects(this, GetTopPosition(), GetBottomPosition(), 10, ObjectTypesArray, false, ActorsToIgnore, DrawDebugType, HitResult, true, FLinearColor::Red, FLinearColor::Green, 5.0);
+}
+
+FVector AArenaWeapon::GetTopPosition()
+{
+	return WeaponTop->GetComponentTransform().GetLocation();
+}
+
+FVector AArenaWeapon::GetBottomPosition()
+{
+	return WeaponBottom->GetComponentTransform().GetLocation();
 }
 

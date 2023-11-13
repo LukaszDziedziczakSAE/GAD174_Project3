@@ -49,6 +49,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SpawnWeapon(TSubclassOf<AArenaWeapon> weaponClass);
 
+	UFUNCTION(BlueprintCallable)
+	AArenaWeapon* GetWeapon();
+
 private:
 	void Attack();
 	void BlockStart();
