@@ -45,4 +45,7 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	USceneComponent* WeaponBottom;
+
+	UPROPERTY(EditDefaultsOnly)
+	bool ShowAttackDebug;
 };
