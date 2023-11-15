@@ -52,6 +52,15 @@ public:
 	UFUNCTION(BlueprintCallable)
 	AArenaWeapon* GetWeapon();
 
+	UFUNCTION(BlueprintPure)
+	bool IsWeaponOneHanded();
+
+	UFUNCTION(BlueprintCallable)
+	void ApplyDamage(float Amount);
+
+	UFUNCTION(BlueprintCallable)
+	void PlayImpact();
+
 private:
 	void Attack();
 	void BlockStart();
@@ -85,5 +94,20 @@ private:
 	TSubclassOf<AArenaWeapon> WeaponClass;
 
 	UPROPERTY(EditDefaultsOnly)
-	UAnimMontage* AttackMontage;
+	UAnimMontage* TwoHandedAttackMontage;
+
+	UPROPERTY(EditDefaultsOnly)
+	UAnimMontage* OneHandedAttackMontage;
+
+	UPROPERTY(EditDefaultsOnly)
+	UAnimMontage* TwoHandedImpactMontage;
+
+	UPROPERTY(EditDefaultsOnly)
+	UAnimMontage* OneHandedImpactMontage;
+
+	UPROPERTY(EditDefaultsOnly)
+	UAnimMontage* TwoHandedBlockingImpactMontage;
+
+	UPROPERTY(EditDefaultsOnly)
+	UAnimMontage* OneHandedBlockingImpactMontage;
 };

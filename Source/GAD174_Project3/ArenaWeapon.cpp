@@ -2,6 +2,7 @@
 
 
 #include "ArenaWeapon.h"
+#include "ArenaCharacter.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 // Sets default values
@@ -40,8 +41,9 @@ void AArenaWeapon::Tick(float DeltaTime)
 void AArenaWeapon::HitDetect()
 {
 	TArray< TEnumAsByte< EObjectTypeQuery >> ObjectTypesArray;
-	ObjectTypesArray.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_GameTraceChannel1));
+	ObjectTypesArray.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn));
 	TArray< AActor* > ActorsToIgnore;
+	ActorsToIgnore.Add(Owner);
 	EDrawDebugTrace::Type DrawDebugType;
 	if (ShowAttackDebug)
 	{
@@ -51,8 +53,28 @@ void AArenaWeapon::HitDetect()
 	{
 		DrawDebugType = EDrawDebugTrace::None;
 	}
+
 	FHitResult HitResult;
-	UKismetSystemLibrary::SphereTraceSingleForObjects(this, GetTopPosition(), GetBottomPosition(), 10, ObjectTypesArray, false, ActorsToIgnore, DrawDebugType, HitResult, true, FLinearColor::Red, FLinearColor::Green, 5.0);
+	if (UKismetSystemLibrary::SphereTraceSingleForObjects(this, GetTopPosition(), GetBottomPosition(), 10, ObjectTypesArray, true, ActorsToIgnore, DrawDebugType, HitResult, true, FLinearColor::Red, FLinearColor::Green, 5.0))
+	{
+		//UE_LOG(LogTemp, Warning, TEXT("Hit detected"));
+
+		if (!HitActors.Contains(HitResult.GetActor()))
+		{
+			HitActors.Add(HitResult.GetActor());
+
+			AArenaCharacter* HitCharacter = Cast<AArenaCharacter>(HitResult.GetActor());
+			if (HitCharacter != nullptr && !HitCharacter->IsDead())
+			{
+				UE_LOG(LogTemp, Log, TEXT("%s Hit %s"), *GetName(), *HitCharacter->GetName());
+				HitCharacter->ApplyDamage(DamageAmount);
+			}
+		}
+		/*else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Actor already hit"));
+		}*/
+	}
 }
 
 FVector AArenaWeapon::GetTopPosition()
@@ -63,5 +85,15 @@ FVector AArenaWeapon::GetTopPosition()
 FVector AArenaWeapon::GetBottomPosition()
 {
 	return WeaponBottom->GetComponentTransform().GetLocation();
+}
+
+bool AArenaWeapon::IsOneHanded()
+{
+	return OneHanded;
+}
+
+void AArenaWeapon::AttackReset()
+{
+	HitActors.Empty();
 }
 

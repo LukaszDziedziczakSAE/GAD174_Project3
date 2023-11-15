@@ -72,6 +72,7 @@ bool AArenaCharacter::GetAttacking()
 void AArenaCharacter::AttackComplete()
 {
 	Attacking = false;
+	Weapon->AttackReset();
 	//UE_LOG(LogTemp, Warning, TEXT("Attack complete"));
 }
 
@@ -87,17 +88,67 @@ AArenaWeapon* AArenaCharacter::GetWeapon()
 	return Weapon;
 }
 
+bool AArenaCharacter::IsWeaponOneHanded()
+{
+	if (Weapon == nullptr) return false;
+	return Weapon->IsOneHanded();
+}
+
+void AArenaCharacter::ApplyDamage(float Amount)
+{
+	UE_LOG(LogTemp, Log, TEXT("%s took %f damage"), *GetName(), Amount);
+	Health -= Amount;
+
+	if (Health > 0) PlayImpact();
+}
+
+void AArenaCharacter::PlayImpact()
+{
+	if (IsWeaponOneHanded())
+	{
+		if (Blocking)
+		{
+			GetMesh()->GetAnimInstance()->Montage_Play(OneHandedBlockingImpactMontage);
+		}
+		else
+		{
+			GetMesh()->GetAnimInstance()->Montage_Play(OneHandedImpactMontage);
+		}
+	}
+	else
+	{
+		if (Blocking)
+		{
+			GetMesh()->GetAnimInstance()->Montage_Play(TwoHandedBlockingImpactMontage);
+		}
+		else
+		{
+			GetMesh()->GetAnimInstance()->Montage_Play(TwoHandedImpactMontage);
+		}
+	}
+}
+
 void AArenaCharacter::Attack()
 {
 	if (Attacking || Blocking) return;
 	Attacking = true;
 
-	if (GetMesh()->GetAnimInstance()->Montage_Play(AttackMontage) == 0)
+	if (IsWeaponOneHanded())
 	{
-		UE_LOG(LogTemp, Error, TEXT("Failed to play montage"));
-	};
-
-	//UE_LOG(LogTemp, Warning, TEXT("Attack pressed"));
+		if (GetMesh()->GetAnimInstance()->Montage_Play(OneHandedAttackMontage) == 0)
+		{
+			UE_LOG(LogTemp, Error, TEXT("Failed to play montage"));
+		};
+	}
+	else
+	{
+		if (GetMesh()->GetAnimInstance()->Montage_Play(TwoHandedAttackMontage) == 0)
+		{
+			UE_LOG(LogTemp, Error, TEXT("Failed to play montage"));
+		};
+	}
+	
+	UE_LOG(LogTemp, Log, TEXT("%s attacked"), *GetName());
 }
 
 void AArenaCharacter::BlockStart()
