@@ -33,6 +33,12 @@ public:
 	UFUNCTION(BlueprintPure)
 	FVector GetBottomPosition();
 
+	UFUNCTION(BlueprintPure)
+	bool IsOneHanded();
+
+	UFUNCTION(BlueprintCallable)
+	void AttackReset();
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* Root;
@@ -48,4 +54,16 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 	bool ShowAttackDebug;
+
+	UPROPERTY(EditDefaultsOnly)
+	bool OneHanded;
+
+	UPROPERTY(VisibleAnywhere)
+	TArray<AActor*> HitActors;
+
+	UPROPERTY(EditAnywhere)
+	float DamageAmount;
+
+	/*UPROPERTY(EditDefaultsOnly)
+	TArray< TEnumAsByte< EObjectTypeQuery >> ObjectTypesArray;*/
 };
