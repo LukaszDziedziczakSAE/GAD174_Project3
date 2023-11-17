@@ -68,6 +68,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void IsBlockingStop();
 
+	UFUNCTION(BlueprintCallable)
+	void LeftFootstep();
+
+	UFUNCTION(BlueprintCallable)
+	void RightFootstep();
+
 private:
 	void Attack();
 	void BlockStart();
@@ -129,4 +135,7 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 	USoundCue* DeathScreamSound;
+
+	UPROPERTY(EditDefaultsOnly)
+	USoundCue* FootstepSound;
 };

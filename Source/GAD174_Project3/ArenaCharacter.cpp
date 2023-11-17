@@ -157,6 +157,28 @@ void AArenaCharacter::IsBlockingStop()
 	IsBlocking = false;
 }
 
+void AArenaCharacter::LeftFootstep()
+{
+	// add VFX coding for left foot
+
+	if (FootstepSound != nullptr)
+	{
+		Audio->SetSound(FootstepSound);
+		Audio->Play();
+	}
+}
+
+void AArenaCharacter::RightFootstep()
+{
+	// add VFX coding for right foot
+
+	if (FootstepSound != nullptr)
+	{
+		Audio->SetSound(FootstepSound);
+		Audio->Play();
+	}
+}
+
 void AArenaCharacter::Attack()
 {
 	if (Attacking || Blocking) return;
