@@ -4,7 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Components/BoxComponent.h"
+//#include "Components/BoxComponent.h"
+#include "Sound/SoundCue.h"
 #include "ArenaWeapon.generated.h"
 
 UCLASS()
@@ -39,6 +40,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void AttackReset();
 
+	UFUNCTION(BlueprintCallable)
+	void PlayWeaponSwingSound();
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* Root;
@@ -66,4 +70,19 @@ private:
 
 	/*UPROPERTY(EditDefaultsOnly)
 	TArray< TEnumAsByte< EObjectTypeQuery >> ObjectTypesArray;*/
+
+	UPROPERTY(EditDefaultsOnly)
+	UAudioComponent* Audio;
+
+	UPROPERTY(EditDefaultsOnly)
+	USoundCue* HitFleshSound;
+
+	UPROPERTY(EditDefaultsOnly)
+	USoundCue* HitMetalSound;
+
+	UPROPERTY(EditDefaultsOnly)
+	USoundCue* WeaponSwingSound;
+
+	UPROPERTY(EditDefaultsOnly)
+	USoundCue* HitWallSound;
 };

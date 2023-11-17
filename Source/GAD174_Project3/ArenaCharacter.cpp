@@ -2,6 +2,7 @@
 
 
 #include "ArenaCharacter.h"
+#include "Components/AudioComponent.h"
 
 // Sets default values
 AArenaCharacter::AArenaCharacter()
@@ -9,6 +10,8 @@ AArenaCharacter::AArenaCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	Audio = CreateAbstractDefaultSubobject<UAudioComponent>(TEXT("Audio"));
+	Audio->SetupAttachment(GetRootComponent());
 }
 
 // Called when the game starts or when spawned
@@ -99,7 +102,23 @@ void AArenaCharacter::ApplyDamage(float Amount)
 	UE_LOG(LogTemp, Log, TEXT("%s took %f damage"), *GetName(), Amount);
 	Health -= Amount;
 
-	if (Health > 0) PlayImpact();
+	if (Health > 0)
+	{
+		PlayImpact();
+		if (GruntingGotHitSound != nullptr)
+		{
+			Audio->SetSound(GruntingGotHitSound);
+			Audio->Play();
+		}
+	}
+	else
+	{
+		if (DeathScreamSound != nullptr)
+		{
+			Audio->SetSound(DeathScreamSound);
+			Audio->Play();
+		}
+	}
 }
 
 void AArenaCharacter::PlayImpact()
@@ -128,6 +147,16 @@ void AArenaCharacter::PlayImpact()
 	}
 }
 
+void AArenaCharacter::IsBlockingStart()
+{
+	IsBlocking = true;
+}
+
+void AArenaCharacter::IsBlockingStop()
+{
+	IsBlocking = false;
+}
+
 void AArenaCharacter::Attack()
 {
 	if (Attacking || Blocking) return;
@@ -146,6 +175,12 @@ void AArenaCharacter::Attack()
 		{
 			UE_LOG(LogTemp, Error, TEXT("Failed to play montage"));
 		};
+	}
+
+	if (GruntingAttackSound != nullptr)
+	{
+		Audio->SetSound(GruntingAttackSound);
+		Audio->Play();
 	}
 	
 	UE_LOG(LogTemp, Log, TEXT("%s attacked"), *GetName());

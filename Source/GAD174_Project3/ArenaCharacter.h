@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "ArenaWeapon.h"
+#include "Sound/SoundCue.h"
 #include "ArenaCharacter.generated.h"
 
 UCLASS()
@@ -61,6 +62,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void PlayImpact();
 
+	UFUNCTION(BlueprintCallable)
+	void IsBlockingStart();
+
+	UFUNCTION(BlueprintCallable)
+	void IsBlockingStop();
+
 private:
 	void Attack();
 	void BlockStart();
@@ -110,4 +117,16 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 	UAnimMontage* OneHandedBlockingImpactMontage;
+
+	UPROPERTY(EditDefaultsOnly)
+	UAudioComponent* Audio;
+
+	UPROPERTY(EditDefaultsOnly)
+	USoundCue* GruntingAttackSound;
+
+	UPROPERTY(EditDefaultsOnly)
+	USoundCue* GruntingGotHitSound;
+
+	UPROPERTY(EditDefaultsOnly)
+	USoundCue* DeathScreamSound;
 };

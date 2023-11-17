@@ -3,6 +3,7 @@
 
 #include "ArenaWeapon.h"
 #include "ArenaCharacter.h"
+#include "Components/AudioComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 // Sets default values
@@ -22,6 +23,9 @@ AArenaWeapon::AArenaWeapon()
 
 	WeaponBottom = CreateDefaultSubobject<USceneComponent>(TEXT("Weapon Bottom"));
 	WeaponBottom->SetupAttachment(Root);
+
+	Audio = CreateAbstractDefaultSubobject<UAudioComponent>(TEXT("Audio"));
+	Audio->SetupAttachment(Root);
 }
 
 // Called when the game starts or when spawned
@@ -68,6 +72,17 @@ void AArenaWeapon::HitDetect()
 			{
 				UE_LOG(LogTemp, Log, TEXT("%s Hit %s"), *GetName(), *HitCharacter->GetName());
 				HitCharacter->ApplyDamage(DamageAmount);
+
+				if (HitCharacter->IsBlocking && HitMetalSound != nullptr)
+				{
+					Audio->SetSound(HitMetalSound);
+					Audio->Play();
+				}
+				else if (HitFleshSound != nullptr)
+				{
+					Audio->SetSound(HitFleshSound);
+					Audio->Play();
+				}
 			}
 		}
 		/*else
@@ -95,5 +110,14 @@ bool AArenaWeapon::IsOneHanded()
 void AArenaWeapon::AttackReset()
 {
 	HitActors.Empty();
+}
+
+void AArenaWeapon::PlayWeaponSwingSound()
+{
+	if (WeaponSwingSound != nullptr)
+	{
+		Audio->SetSound(WeaponSwingSound);
+		Audio->Play();
+	}
 }
 
