@@ -12,7 +12,7 @@ AArenaCharacter::AArenaCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	Audio = CreateAbstractDefaultSubobject<UAudioComponent>(TEXT("Audio"));
+	Audio = CreateDefaultSubobject<UAudioComponent>(TEXT("Audio"));
 	Audio->SetupAttachment(GetRootComponent());
 }
 
@@ -141,6 +141,8 @@ void AArenaCharacter::ApplyDamage(float Amount)
 
 		if (OnDeath.IsBound()) OnDeath.Broadcast();
 	}
+
+	Attacking = false;
 }
 
 void AArenaCharacter::PlayImpact()
@@ -172,16 +174,22 @@ void AArenaCharacter::PlayImpact()
 void AArenaCharacter::IsBlockingStart()
 {
 	IsBlocking = true;
+	UE_LOG(LogTemp, Log, TEXT("%s started blocking"), *GetName());
+
 }
 
 void AArenaCharacter::IsBlockingStop()
 {
 	IsBlocking = false;
+	UE_LOG(LogTemp, Log, TEXT("%s stopped blocking"), *GetName());
 }
 
 void AArenaCharacter::LeftFootstep()
 {
-	// add VFX coding for left foot
+	if (VFX_Footstep != nullptr)
+	{
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), VFX_Footstep, GetMesh()->GetBoneLocation("ball_l"));
+	}
 
 	if (FootstepSound != nullptr)
 	{
@@ -192,7 +200,10 @@ void AArenaCharacter::LeftFootstep()
 
 void AArenaCharacter::RightFootstep()
 {
-	// add VFX coding for right foot
+	if (VFX_Footstep != nullptr)
+	{
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), VFX_Footstep, GetMesh()->GetBoneLocation("ball_r"));
+	}
 
 	if (FootstepSound != nullptr)
 	{

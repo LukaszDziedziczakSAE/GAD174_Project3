@@ -4,6 +4,7 @@
 #include "ArenaWeapon.h"
 #include "ArenaCharacter.h"
 #include "Components/AudioComponent.h"
+#include "NiagaraFunctionLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 // Sets default values
@@ -24,7 +25,7 @@ AArenaWeapon::AArenaWeapon()
 	WeaponBottom = CreateDefaultSubobject<USceneComponent>(TEXT("Weapon Bottom"));
 	WeaponBottom->SetupAttachment(Root);
 
-	Audio = CreateAbstractDefaultSubobject<UAudioComponent>(TEXT("Audio"));
+	Audio = CreateDefaultSubobject<UAudioComponent>(TEXT("Audio"));
 	Audio->SetupAttachment(Root);
 }
 
@@ -71,17 +72,37 @@ void AArenaWeapon::HitDetect()
 			if (HitCharacter != nullptr && !HitCharacter->IsDead())
 			{
 				UE_LOG(LogTemp, Log, TEXT("%s Hit %s"), *GetName(), *HitCharacter->GetName());
-				HitCharacter->ApplyDamage(DamageAmount);
+				
 
-				if (HitCharacter->IsBlocking && HitMetalSound != nullptr)
+				if (HitCharacter->Blocking)
 				{
-					Audio->SetSound(HitMetalSound);
-					Audio->Play();
+					if (HitMetalSound != nullptr)
+					{
+						Audio->SetSound(HitMetalSound);
+						Audio->Play();
+					}
+					
+
+					if (VFX_HitMetal != nullptr)
+					{
+						UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), VFX_HitMetal, HitResult.Location);
+					}
+					
 				}
-				else if (!HitCharacter->IsBlocking && HitFleshSound != nullptr)
+				else 
 				{
-					Audio->SetSound(HitFleshSound);
-					Audio->Play();
+					if (HitFleshSound != nullptr)
+					{
+						Audio->SetSound(HitFleshSound);
+						Audio->Play();
+					}
+
+					if (VFX_HitFlesh != nullptr)
+					{
+						UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), VFX_HitFlesh, HitResult.Location);
+					}
+					
+					HitCharacter->ApplyDamage(DamageAmount);
 				}
 			}
 		}

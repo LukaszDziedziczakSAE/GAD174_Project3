@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "ArenaWeapon.h"
 #include "Sound/SoundCue.h"
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
 #include "ArenaCharacter.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDeath);
@@ -82,12 +84,26 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FDeath OnDeath;
 
-private:
+	UFUNCTION()
 	void Attack();
+
+	UFUNCTION()
 	void BlockStart();
+
+	UFUNCTION()
 	void BlockStop();
+
+	UFUNCTION()
 	void RunningStart();
+
+	UFUNCTION()
 	void RunningStop();
+	
+	// Is the player pressing the blocking button
+	UPROPERTY(VisibleAnywhere)
+	bool Blocking;
+
+private:
 	void MoveForward(float AxisValue);
 	void MoveRight(float AxisValue);
 	void LookUpRate(float AxisValue);
@@ -101,10 +117,6 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	float Health;
-
-	// Is the player pressing the blocking button
-	UPROPERTY(VisibleAnywhere)
-	bool Blocking;
 
 	// Is the player pressing the blocking button
 	UPROPERTY(VisibleAnywhere)
@@ -158,4 +170,7 @@ private:
 
 	UPROPERTY()
 	float WalkingSpeed;
+
+	UPROPERTY(EditDefaultsOnly)
+	class UNiagaraSystem* VFX_Footstep;
 };
