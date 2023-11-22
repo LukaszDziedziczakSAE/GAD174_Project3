@@ -78,7 +78,7 @@ void AArenaWeapon::HitDetect()
 					Audio->SetSound(HitMetalSound);
 					Audio->Play();
 				}
-				else if (HitFleshSound != nullptr)
+				else if (!HitCharacter->IsBlocking && HitFleshSound != nullptr)
 				{
 					Audio->SetSound(HitFleshSound);
 					Audio->Play();
