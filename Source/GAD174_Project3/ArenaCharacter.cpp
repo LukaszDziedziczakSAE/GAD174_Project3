@@ -4,6 +4,8 @@
 #include "ArenaCharacter.h"
 #include "Components/AudioComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "ArenaGameMode.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
@@ -21,8 +23,9 @@ void AArenaCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	// Set Health to Max
+	// Set Health and stamina to Max
 	Health = MaxHealth;
+	Stamina = MaxStamina;
 
 	// Spawn Weapon
 	if (WeaponClass != nullptr)
@@ -34,12 +37,14 @@ void AArenaCharacter::BeginPlay()
 	if (GetCharacterMovement() != nullptr)
 	{
 		WalkingSpeed = GetCharacterMovement()->MaxWalkSpeed;
-		UE_LOG(LogTemp, Warning, TEXT("Walking Speed = %f"), WalkingSpeed);
+		//UE_LOG(LogTemp, Warning, TEXT("Walking Speed = %f"), WalkingSpeed);
 	}
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Could not get CharacterMovement"));
 	}
+
+	GameMode = Cast<AArenaGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 }
 
 // Called every frame
@@ -70,11 +75,6 @@ void AArenaCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 bool AArenaCharacter::IsDead() const
 {
 	return Health <= 0;
-}
-
-float AArenaCharacter::GetHealthPercent() const
-{
-	return Health / MaxHealth;
 }
 
 bool AArenaCharacter::GetBlockingPressed()
@@ -219,6 +219,7 @@ bool AArenaCharacter::GetRunning()
 
 void AArenaCharacter::Attack()
 {
+	if (!GameMode->MatchStarted()) return;
 	if (Attacking || Blocking) return;
 	Attacking = true;
 
@@ -248,6 +249,7 @@ void AArenaCharacter::Attack()
 
 void AArenaCharacter::BlockStart()
 {
+	if (!GameMode->MatchStarted()) return;
 	//UE_LOG(LogTemp, Warning, TEXT("Block started"));
 	Blocking = true;
 }
@@ -261,6 +263,7 @@ void AArenaCharacter::BlockStop()
 
 void AArenaCharacter::RunningStart()
 {
+	if (!GameMode->MatchStarted()) return;
 	Running = true;
 	GetCharacterMovement()->MaxWalkSpeed = RunningSpeed;
 	UE_LOG(LogTemp, Warning, TEXT("Set movement to %f"), GetCharacterMovement()->MaxWalkSpeed);
@@ -273,25 +276,46 @@ void AArenaCharacter::RunningStop()
 	UE_LOG(LogTemp, Warning, TEXT("Set movement to %f"), GetCharacterMovement()->MaxWalkSpeed);
 }
 
+float AArenaCharacter::GetHealthPercentage()
+{
+	return Health/MaxHealth;
+}
+
+float AArenaCharacter::GetStaminaPercentage()
+{
+	return Stamina/MaxStamina;
+}
+
+void AArenaCharacter::ResetCharacter()
+{
+	Health = MaxHealth;
+	Stamina = MaxStamina;
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+}
+
 void AArenaCharacter::MoveForward(float AxisValue)
 {
+	if (!GameMode->MatchStarted()) return;
 	if (Attacking || Blocking) return;
 	AddMovementInput(GetActorForwardVector() * AxisValue);
 }
 
 void AArenaCharacter::MoveRight(float AxisValue)
 {
+	if (!GameMode->MatchStarted()) return;
 	if (Attacking || Blocking) return;
 	AddMovementInput(GetActorRightVector() * AxisValue);
 }
 
 void AArenaCharacter::LookUpRate(float AxisValue)
 {
+	if (!GameMode->MatchStarted()) return;
 	AddControllerPitchInput(AxisValue * RotationRate * GetWorld()->GetDeltaSeconds());
 }
 
 void AArenaCharacter::LookRightRate(float AxisValue)
 {
+	if (!GameMode->MatchStarted()) return;
 	AddControllerYawInput(AxisValue * RotationRate * GetWorld()->GetDeltaSeconds());
 }
 

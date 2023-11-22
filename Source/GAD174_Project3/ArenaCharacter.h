@@ -35,9 +35,6 @@ public:
 	UFUNCTION(BlueprintPure)
 	bool IsDead() const;
 
-	UFUNCTION(BlueprintPure)
-	float GetHealthPercent() const;
-
 	// Is the character blocking attacks
 	UPROPERTY(VisibleAnywhere)
 	bool IsBlocking;
@@ -103,6 +100,15 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	bool Blocking;
 
+	UFUNCTION(BlueprintPure)
+	float GetHealthPercentage();
+
+	UFUNCTION(BlueprintPure)
+	float GetStaminaPercentage();
+
+	UFUNCTION(BlueprintCallable)
+	void ResetCharacter();
+
 private:
 	void MoveForward(float AxisValue);
 	void MoveRight(float AxisValue);
@@ -117,6 +123,15 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	float Health;
+
+	UPROPERTY(EditDefaultsOnly)
+	float MaxStamina = 100;
+
+	UPROPERTY(VisibleAnywhere)
+	float Stamina;
+
+	UPROPERTY(EditDefaultsOnly)
+	float StaminaRegen = 10;
 
 	// Is the player pressing the blocking button
 	UPROPERTY(VisibleAnywhere)
@@ -173,4 +188,7 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 	class UNiagaraSystem* VFX_Footstep;
+
+	UPROPERTY()
+	class AArenaGameMode* GameMode;
 };
