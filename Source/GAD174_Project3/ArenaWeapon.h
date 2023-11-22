@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Sound/SoundCue.h"
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
 #include "ArenaWeapon.generated.h"
 
 UCLASS()
@@ -84,4 +86,10 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 	USoundCue* HitWallSound;
+
+	UPROPERTY(EditDefaultsOnly)
+	UNiagaraSystem* VFX_HitMetal;
+
+	UPROPERTY(EditDefaultsOnly)
+	UNiagaraSystem* VFX_HitFlesh;
 };

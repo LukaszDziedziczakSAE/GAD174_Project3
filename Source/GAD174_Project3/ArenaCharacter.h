@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "ArenaWeapon.h"
 #include "Sound/SoundCue.h"
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
 #include "ArenaCharacter.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDeath);
@@ -32,9 +34,6 @@ public:
 
 	UFUNCTION(BlueprintPure)
 	bool IsDead() const;
-
-	UFUNCTION(BlueprintPure)
-	float GetHealthPercent() const;
 
 	// Is the character blocking attacks
 	UPROPERTY(VisibleAnywhere)
@@ -82,12 +81,35 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FDeath OnDeath;
 
-private:
+	UFUNCTION()
 	void Attack();
+
+	UFUNCTION()
 	void BlockStart();
+
+	UFUNCTION()
 	void BlockStop();
+
+	UFUNCTION()
 	void RunningStart();
+
+	UFUNCTION()
 	void RunningStop();
+	
+	// Is the player pressing the blocking button
+	UPROPERTY(VisibleAnywhere)
+	bool Blocking;
+
+	UFUNCTION(BlueprintPure)
+	float GetHealthPercentage();
+
+	UFUNCTION(BlueprintPure)
+	float GetStaminaPercentage();
+
+	UFUNCTION(BlueprintCallable)
+	void ResetCharacter();
+
+private:
 	void MoveForward(float AxisValue);
 	void MoveRight(float AxisValue);
 	void LookUpRate(float AxisValue);
@@ -102,9 +124,14 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	float Health;
 
-	// Is the player pressing the blocking button
+	UPROPERTY(EditDefaultsOnly)
+	float MaxStamina = 100;
+
 	UPROPERTY(VisibleAnywhere)
-	bool Blocking;
+	float Stamina;
+
+	UPROPERTY(EditDefaultsOnly)
+	float StaminaRegen = 10;
 
 	// Is the player pressing the blocking button
 	UPROPERTY(VisibleAnywhere)
@@ -158,4 +185,10 @@ private:
 
 	UPROPERTY()
 	float WalkingSpeed;
+
+	UPROPERTY(EditDefaultsOnly)
+	class UNiagaraSystem* VFX_Footstep;
+
+	UPROPERTY()
+	class AArenaGameMode* GameMode;
 };

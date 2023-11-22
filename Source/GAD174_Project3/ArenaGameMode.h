@@ -36,6 +36,12 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 	FMatchEnd OnMatchEnd;
+
+	UFUNCTION(BlueprintCallable)
+	void NewMatch();
+
+	UFUNCTION(BlueprintCallable)
+	bool MatchStarted();
 	
 private:
 	UPROPERTY(VisibleAnywhere)
@@ -48,6 +54,9 @@ private:
 	TArray<AActor*> Spawners;
 
 	UPROPERTY(VisibleAnywhere)
+	AArenaCharacter* Player;
+
+	UPROPERTY(VisibleAnywhere)
 	TArray<AArenaCharacter*> Enemies;
 
 	UFUNCTION()
@@ -55,6 +64,12 @@ private:
 
 	UPROPERTY()
 	FTimerHandle RoundCooldownTimer;
+
+	UPROPERTY(VisibleAnywhere)
+	FVector PlayerStartLocation;
+
+	UPROPERTY(VisibleAnywhere)
+	FRotator PlayerStartRotation;
 
 protected:
 	// Called when the game starts or when spawned
