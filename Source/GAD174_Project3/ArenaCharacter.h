@@ -8,6 +8,8 @@
 #include "Sound/SoundCue.h"
 #include "ArenaCharacter.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDeath);
+
 UCLASS()
 class GAD174_PROJECT3_API AArenaCharacter : public ACharacter
 {
@@ -74,10 +76,18 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void RightFootstep();
 
+	UFUNCTION(BlueprintPure)
+	bool GetRunning();
+
+	UPROPERTY(BlueprintAssignable)
+	FDeath OnDeath;
+
 private:
 	void Attack();
 	void BlockStart();
 	void BlockStop();
+	void RunningStart();
+	void RunningStop();
 	void MoveForward(float AxisValue);
 	void MoveRight(float AxisValue);
 	void LookUpRate(float AxisValue);
@@ -99,6 +109,10 @@ private:
 	// Is the player pressing the blocking button
 	UPROPERTY(VisibleAnywhere)
 	bool Attacking;
+
+	// Is the player pressing the run/sprint button
+	UPROPERTY(VisibleAnywhere)
+	bool Running;
 
 	UPROPERTY(VisibleAnywhere)
 	AArenaWeapon* Weapon;
@@ -138,4 +152,10 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 	USoundCue* FootstepSound;
+
+	UPROPERTY(EditDefaultsOnly)
+	float RunningSpeed;
+
+	UPROPERTY()
+	float WalkingSpeed;
 };
