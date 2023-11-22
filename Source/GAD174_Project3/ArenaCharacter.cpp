@@ -3,6 +3,7 @@
 
 #include "ArenaCharacter.h"
 #include "Components/AudioComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 AArenaCharacter::AArenaCharacter()
@@ -27,6 +28,17 @@ void AArenaCharacter::BeginPlay()
 	{
 		SpawnWeapon(WeaponClass);
 	}
+
+	// Record Walking speed
+	if (GetCharacterMovement() != nullptr)
+	{
+		WalkingSpeed = GetCharacterMovement()->MaxWalkSpeed;
+		UE_LOG(LogTemp, Warning, TEXT("Walking Speed = %f"), WalkingSpeed);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Could not get CharacterMovement"));
+	}
 }
 
 // Called every frame
@@ -44,6 +56,8 @@ void AArenaCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	PlayerInputComponent->BindAction(TEXT("Attack"), EInputEvent::IE_Pressed, this, &AArenaCharacter::Attack);
 	PlayerInputComponent->BindAction(TEXT("Block"), EInputEvent::IE_Pressed, this, &AArenaCharacter::BlockStart);
 	PlayerInputComponent->BindAction(TEXT("Block"), EInputEvent::IE_Released, this, &AArenaCharacter::BlockStop);
+	PlayerInputComponent->BindAction(TEXT("Run"), EInputEvent::IE_Pressed, this, &AArenaCharacter::RunningStart);
+	PlayerInputComponent->BindAction(TEXT("Run"), EInputEvent::IE_Released, this, &AArenaCharacter::RunningStop);
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &AArenaCharacter::MoveForward);
 	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &AArenaCharacter::MoveRight);
 	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &APawn::AddControllerPitchInput);
@@ -179,6 +193,11 @@ void AArenaCharacter::RightFootstep()
 	}
 }
 
+bool AArenaCharacter::GetRunning()
+{
+	return Running;
+}
+
 void AArenaCharacter::Attack()
 {
 	if (Attacking || Blocking) return;
@@ -219,6 +238,20 @@ void AArenaCharacter::BlockStop()
 	//if (Attacking || Blocking) return;
 	//UE_LOG(LogTemp, Warning, TEXT("Block ended"));
 	Blocking = false;
+}
+
+void AArenaCharacter::RunningStart()
+{
+	Running = true;
+	GetCharacterMovement()->MaxWalkSpeed = RunningSpeed;
+	UE_LOG(LogTemp, Warning, TEXT("Set movement to %f"), GetCharacterMovement()->MaxWalkSpeed);
+}
+
+void AArenaCharacter::RunningStop()
+{
+	Running = false;
+	GetCharacterMovement()->MaxWalkSpeed = WalkingSpeed;
+	UE_LOG(LogTemp, Warning, TEXT("Set movement to %f"), GetCharacterMovement()->MaxWalkSpeed);
 }
 
 void AArenaCharacter::MoveForward(float AxisValue)
