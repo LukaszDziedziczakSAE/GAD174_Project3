@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-//#include "Components/BoxComponent.h"
 #include "Sound/SoundCue.h"
 #include "ArenaWeapon.generated.h"
 

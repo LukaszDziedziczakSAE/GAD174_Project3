@@ -3,6 +3,7 @@
 
 #include "ArenaCharacter.h"
 #include "Components/AudioComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
@@ -95,6 +96,8 @@ void AArenaCharacter::AttackComplete()
 
 void AArenaCharacter::SpawnWeapon(TSubclassOf<AArenaWeapon> weaponClass)
 {
+	if (Weapon != nullptr) Weapon->Destroy();
+
 	Weapon = GetWorld()->SpawnActor<AArenaWeapon>(weaponClass);
 	Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
 	Weapon->SetOwner(this);
@@ -125,13 +128,18 @@ void AArenaCharacter::ApplyDamage(float Amount)
 			Audio->Play();
 		}
 	}
-	else
+	else // Character is dead
 	{
 		if (DeathScreamSound != nullptr)
 		{
 			Audio->SetSound(DeathScreamSound);
 			Audio->Play();
 		}
+
+		//UCapsuleComponent* capsule = GetCapsuleComponent();
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+		if (OnDeath.IsBound()) OnDeath.Broadcast();
 	}
 }
 

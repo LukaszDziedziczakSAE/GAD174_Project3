@@ -8,6 +8,8 @@
 #include "Sound/SoundCue.h"
 #include "ArenaCharacter.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDeath);
+
 UCLASS()
 class GAD174_PROJECT3_API AArenaCharacter : public ACharacter
 {
@@ -76,6 +78,9 @@ public:
 
 	UFUNCTION(BlueprintPure)
 	bool GetRunning();
+
+	UPROPERTY(BlueprintAssignable)
+	FDeath OnDeath;
 
 private:
 	void Attack();
