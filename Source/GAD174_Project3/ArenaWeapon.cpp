@@ -88,6 +88,7 @@ void AArenaWeapon::HitDetect()
 						UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), VFX_HitMetal, HitResult.Location);
 					}
 					
+					HitCharacter->PlayImpact();
 				}
 				else 
 				{
