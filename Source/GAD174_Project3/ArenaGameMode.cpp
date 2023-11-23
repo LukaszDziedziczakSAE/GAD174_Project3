@@ -4,6 +4,7 @@
 #include "ArenaGameMode.h"
 #include "Kismet/GameplayStatics.h"
 #include "TimerManager.h"
+#include "ArenaCharacter.h"
 
 void AArenaGameMode::StartNextRound()
 {
@@ -21,26 +22,12 @@ void AArenaGameMode::StartNextRound()
 
 	round++;
 
-	if (round > HighestRound)
+	if (round > HighestRound || Player->IsDead())
 	{
+		round = 0;
 		if (OnMatchEnd.IsBound()) OnMatchEnd.Broadcast();
 		return;
 	}
-
-
-	/*TArray<AActor*> weapons;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AArenaWeapon::StaticClass(), weapons);
-	if (weapons.Num() > 0)
-	{
-		for (int index = 0; index < weapons.Num(); index++)
-		{
-			if (weapons[index]->Owner != nullptr)
-			{
-				weapons[index]->Destroy();
-			}
-			
-		}
-	}*/
 
 	// Spawn new enemies
 	for (int index = 0; index < Spawners.Num(); index++)
@@ -67,10 +54,33 @@ void AArenaGameMode::OnCharacterDeath()
 {
 	//UE_LOG(LogTemp, Warning, TEXT("Character Died"));
 
-	if (AllEnemiesDead())
+	if (AllEnemiesDead() || Player->IsDead())
 	{
 		GetWorld()->GetTimerManager().SetTimer(RoundCooldownTimer, this, &AArenaGameMode::StartNextRound, RoundCooldown, false);
 	}
+}
+
+void AArenaGameMode::NewMatch()
+{
+	if (Enemies.Num() > 0)
+	{
+		for (int index = 0; index < Enemies.Num(); index++)
+		{
+			Enemies[index]->GetWeapon()->Destroy();
+			Enemies[index]->Destroy();
+		}
+		Enemies.Empty();
+	}
+
+	if (Player == nullptr) return;
+
+	Player->SetActorLocationAndRotation(PlayerStartLocation, PlayerStartRotation);
+	Player->ResetCharacter();
+}
+
+bool AArenaGameMode::MatchStarted()
+{
+	return round > 0 && round <= HighestRound;
 }
 
 bool AArenaGameMode::AllEnemiesDead()
@@ -101,4 +111,17 @@ void AArenaGameMode::BeginPlay()
 		int spawnerHighest = spawner->GetHighestRoundNumber();
 		if (spawnerHighest > HighestRound) HighestRound = spawnerHighest;
 	}
+
+	Player = Cast<AArenaCharacter>(GetWorld()->GetFirstPlayerController()->GetPawnOrSpectator());
+	if (Player == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("GameMode could not get Player Character"));
+	}
+	else
+	{
+		Player->OnDeath.AddDynamic(this, &AArenaGameMode::OnCharacterDeath);
+		PlayerStartLocation = Player->GetActorLocation();
+		PlayerStartRotation = Player->GetActorRotation();
+	}
+	
 }
