@@ -144,6 +144,9 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	AArenaWeapon* Weapon;
 
+	UPROPERTY(VisibleAnywhere)
+	AActor* Shield;
+
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AArenaWeapon> WeaponClass;
 

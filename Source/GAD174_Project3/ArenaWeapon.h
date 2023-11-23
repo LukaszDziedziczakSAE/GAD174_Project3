@@ -44,6 +44,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void PlayWeaponSwingSound();
 
+	UFUNCTION(BlueprintPure)
+	TSubclassOf<AActor> GetShieldClass();
+
+	UFUNCTION(BlueprintPure)
+	bool HasShield();
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* Root;
@@ -92,4 +98,7 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 	UNiagaraSystem* VFX_HitFlesh;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AActor> ShieldClass;
 };
