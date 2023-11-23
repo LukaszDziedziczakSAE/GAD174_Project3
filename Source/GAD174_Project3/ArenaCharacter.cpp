@@ -97,10 +97,18 @@ void AArenaCharacter::AttackComplete()
 void AArenaCharacter::SpawnWeapon(TSubclassOf<AArenaWeapon> weaponClass)
 {
 	if (Weapon != nullptr) Weapon->Destroy();
+	if (Shield != nullptr) Shield->Destroy();
 
 	Weapon = GetWorld()->SpawnActor<AArenaWeapon>(weaponClass);
 	Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
 	Weapon->SetOwner(this);
+
+	if (Weapon->HasShield())
+	{
+		Shield = GetWorld()->SpawnActor<AActor>(Weapon->GetShieldClass());
+		Shield->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("ShieldSocket"));
+		Shield->SetOwner(this);
+	}
 }
 
 AArenaWeapon* AArenaCharacter::GetWeapon()

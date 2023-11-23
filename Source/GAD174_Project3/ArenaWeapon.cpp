@@ -142,3 +142,14 @@ void AArenaWeapon::PlayWeaponSwingSound()
 	}
 }
 
+TSubclassOf<AActor> AArenaWeapon::GetShieldClass()
+{
+	return ShieldClass;
+}
+
+bool AArenaWeapon::HasShield()
+{
+	if (!OneHanded) return false;
+	return ShieldClass != nullptr;
+}
+
