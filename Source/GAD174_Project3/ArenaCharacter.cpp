@@ -16,6 +16,8 @@ AArenaCharacter::AArenaCharacter()
 
 	Audio = CreateDefaultSubobject<UAudioComponent>(TEXT("Audio"));
 	Audio->SetupAttachment(GetRootComponent());
+
+	Health = 1;
 }
 
 // Called when the game starts or when spawned
@@ -105,7 +107,7 @@ void AArenaCharacter::SpawnWeapon(TSubclassOf<AArenaWeapon> weaponClass)
 
 	if (Weapon->HasShield())
 	{
-		Shield = GetWorld()->SpawnActor<AActor>(Weapon->GetShieldClass());
+		Shield = GetWorld()->SpawnActor<AArenaShield>(Weapon->GetShieldClass());
 		Shield->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("ShieldSocket"));
 		Shield->SetOwner(this);
 	}
@@ -114,6 +116,11 @@ void AArenaCharacter::SpawnWeapon(TSubclassOf<AArenaWeapon> weaponClass)
 AArenaWeapon* AArenaCharacter::GetWeapon()
 {
 	return Weapon;
+}
+
+AArenaShield* AArenaCharacter::GetShield()
+{
+	return Shield;
 }
 
 bool AArenaCharacter::IsWeaponOneHanded()
