@@ -9,6 +9,8 @@
 #include "NiagaraFunctionLibrary.h"
 #include "ArenaWeapon.generated.h"
 
+class AArenaShield;
+
 UCLASS()
 class GAD174_PROJECT3_API AArenaWeapon : public AActor
 {
@@ -45,7 +47,7 @@ public:
 	void PlayWeaponSwingSound();
 
 	UFUNCTION(BlueprintPure)
-	TSubclassOf<AActor> GetShieldClass();
+	TSubclassOf<AArenaShield> GetShieldClass();
 
 	UFUNCTION(BlueprintPure)
 	bool HasShield();
@@ -100,5 +102,5 @@ private:
 	UNiagaraSystem* VFX_HitFlesh;
 
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<AActor> ShieldClass;
+	TSubclassOf<AArenaShield> ShieldClass;
 };

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "ArenaWeapon.h"
+#include "ArenaShield.h"
 #include "Sound/SoundCue.h"
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
@@ -53,6 +54,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	AArenaWeapon* GetWeapon();
+
+	UFUNCTION(BlueprintCallable)
+	AArenaShield* GetShield();
 
 	UFUNCTION(BlueprintPure)
 	bool IsWeaponOneHanded();
@@ -109,9 +113,14 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ResetCharacter();
 
+	UFUNCTION()
+	void SetRunning(bool isRunning);
+
 private:
 	void MoveForward(float AxisValue);
 	void MoveRight(float AxisValue);
+	void LookUp(float AxisValue);
+	void LookRight(float AxisValue);
 	void LookUpRate(float AxisValue);
 	void LookRightRate(float AxisValue);
 
@@ -145,7 +154,7 @@ private:
 	AArenaWeapon* Weapon;
 
 	UPROPERTY(VisibleAnywhere)
-	AActor* Shield;
+	AArenaShield* Shield;
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AArenaWeapon> WeaponClass;

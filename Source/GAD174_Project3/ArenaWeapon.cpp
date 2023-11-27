@@ -143,7 +143,7 @@ void AArenaWeapon::PlayWeaponSwingSound()
 	}
 }
 
-TSubclassOf<AActor> AArenaWeapon::GetShieldClass()
+TSubclassOf<AArenaShield> AArenaWeapon::GetShieldClass()
 {
 	return ShieldClass;
 }
