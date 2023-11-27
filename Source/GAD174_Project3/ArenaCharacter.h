@@ -113,9 +113,14 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ResetCharacter();
 
+	UFUNCTION()
+	void SetRunning(bool isRunning);
+
 private:
 	void MoveForward(float AxisValue);
 	void MoveRight(float AxisValue);
+	void LookUp(float AxisValue);
+	void LookRight(float AxisValue);
 	void LookUpRate(float AxisValue);
 	void LookRightRate(float AxisValue);
 

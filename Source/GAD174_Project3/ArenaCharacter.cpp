@@ -68,8 +68,8 @@ void AArenaCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	PlayerInputComponent->BindAction(TEXT("Run"), EInputEvent::IE_Released, this, &AArenaCharacter::RunningStop);
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &AArenaCharacter::MoveForward);
 	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &AArenaCharacter::MoveRight);
-	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &APawn::AddControllerPitchInput);
-	PlayerInputComponent->BindAxis(TEXT("LookRight"), this, &APawn::AddControllerYawInput);
+	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &AArenaCharacter::LookUp);
+	PlayerInputComponent->BindAxis(TEXT("LookRight"), this, &AArenaCharacter::LookRight);
 	PlayerInputComponent->BindAxis(TEXT("LookUpRate"), this, &AArenaCharacter::LookUpRate);
 	PlayerInputComponent->BindAxis(TEXT("LookRightRate"), this, &AArenaCharacter::LookRightRate);
 }
@@ -308,6 +308,20 @@ void AArenaCharacter::ResetCharacter()
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 }
 
+void AArenaCharacter::SetRunning(bool isRunning)
+{
+	Running = isRunning;
+
+	if (Running)
+	{
+		GetCharacterMovement()->MaxWalkSpeed = RunningSpeed;
+	}
+	else
+	{
+		GetCharacterMovement()->MaxWalkSpeed = WalkingSpeed;
+	}
+}
+
 void AArenaCharacter::MoveForward(float AxisValue)
 {
 	if (!GameMode->MatchStarted()) return;
@@ -320,6 +334,18 @@ void AArenaCharacter::MoveRight(float AxisValue)
 	if (!GameMode->MatchStarted()) return;
 	if (Attacking || Blocking) return;
 	AddMovementInput(GetActorRightVector() * AxisValue);
+}
+
+void AArenaCharacter::LookUp(float AxisValue)
+{
+	if (!GameMode->MatchStarted()) return;
+	AddControllerPitchInput(AxisValue);
+}
+
+void AArenaCharacter::LookRight(float AxisValue)
+{
+	if (!GameMode->MatchStarted()) return;
+	AddControllerYawInput(AxisValue);
 }
 
 void AArenaCharacter::LookUpRate(float AxisValue)
