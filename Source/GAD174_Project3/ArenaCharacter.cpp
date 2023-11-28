@@ -70,6 +70,20 @@ void AArenaCharacter::Tick(float DeltaTime)
 			RunningStop();
 		}
 	}
+
+	else if (Blocking)
+	{
+		if (Stamina > 0)
+		{
+			Stamina -= Weapon->GetStaminaBlockingCost() * DeltaTime;
+		}
+		else
+		{
+			BlockStop();
+		}
+	}
+
+	if (Stamina < 0) Stamina = 0;
 }
 
 // Called to bind functionality to input
@@ -357,6 +371,12 @@ float AArenaCharacter::GetStaminaRunningCost()
 bool AArenaCharacter::HasEnoughStamina(float StaminaCost)
 {
 	return Stamina >= StaminaCost;
+}
+
+void AArenaCharacter::TakeStamina(float Amount)
+{
+	Stamina -= Amount;
+	if (Stamina < 0) Stamina = 0;
 }
 
 void AArenaCharacter::MoveForward(float AxisValue)

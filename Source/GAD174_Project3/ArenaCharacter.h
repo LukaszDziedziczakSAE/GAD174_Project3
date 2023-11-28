@@ -125,6 +125,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool HasEnoughStamina(float StaminaCost);
 
+	UFUNCTION(BlueprintCallable)
+	void TakeStamina(float Amount);
+
 private:
 	void MoveForward(float AxisValue);
 	void MoveRight(float AxisValue);

@@ -61,6 +61,9 @@ public:
 	UFUNCTION(BlueprintPure)
 	float GetStaminaBlockingCost();
 
+	UFUNCTION(BlueprintPure)
+	float GetStaminaCost();
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* Root;
@@ -121,4 +124,7 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 	float StaminaBlockingCost;
+
+	UPROPERTY(EditDefaultsOnly)
+	float StaminaCost;
 };

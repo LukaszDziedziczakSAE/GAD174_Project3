@@ -89,6 +89,7 @@ void AArenaWeapon::HitDetect()
 					}
 					
 					HitCharacter->PlayImpact();
+					HitCharacter->TakeStamina(StaminaCost);
 				}
 				else 
 				{
@@ -167,5 +168,10 @@ float AArenaWeapon::GetStaminaBlockingStartCost()
 float AArenaWeapon::GetStaminaBlockingCost()
 {
 	return StaminaBlockingCost;
+}
+
+float AArenaWeapon::GetStaminaCost()
+{
+	return StaminaCost;
 }
 
