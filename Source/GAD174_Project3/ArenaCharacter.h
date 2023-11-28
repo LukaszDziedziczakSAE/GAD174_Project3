@@ -116,6 +116,15 @@ public:
 	UFUNCTION()
 	void SetRunning(bool isRunning);
 
+	UFUNCTION(BlueprintPure)
+	float GetStaminaRecovery();
+
+	UFUNCTION(BlueprintPure)
+	float GetStaminaRunningCost();
+
+	UFUNCTION(BlueprintCallable)
+	bool HasEnoughStamina(float StaminaCost);
+
 private:
 	void MoveForward(float AxisValue);
 	void MoveRight(float AxisValue);
@@ -138,9 +147,6 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	float Stamina;
-
-	UPROPERTY(EditDefaultsOnly)
-	float StaminaRegen = 10;
 
 	// Is the player pressing the blocking button
 	UPROPERTY(VisibleAnywhere)
@@ -203,4 +209,10 @@ private:
 
 	UPROPERTY()
 	class AArenaGameMode* GameMode;
+
+	UPROPERTY(EditDefaultsOnly)
+	float StaminaRecovery;
+
+	UPROPERTY(EditDefaultsOnly)
+	float StaminaRunningCost;
 };

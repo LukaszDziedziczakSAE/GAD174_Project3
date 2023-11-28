@@ -154,3 +154,18 @@ bool AArenaWeapon::HasShield()
 	return ShieldClass != nullptr;
 }
 
+float AArenaWeapon::GetStaminaAttackCost()
+{
+	return StaminaAttackCost;
+}
+
+float AArenaWeapon::GetStaminaBlockingStartCost()
+{
+	return StaminaBlockingStartCost;
+}
+
+float AArenaWeapon::GetStaminaBlockingCost()
+{
+	return StaminaBlockingCost;
+}
+
