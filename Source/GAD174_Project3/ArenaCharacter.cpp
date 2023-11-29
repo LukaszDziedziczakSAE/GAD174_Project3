@@ -381,39 +381,39 @@ void AArenaCharacter::TakeStamina(float Amount)
 
 void AArenaCharacter::MoveForward(float AxisValue)
 {
-	if (!GameMode->MatchStarted()) return;
+	if (!GameMode->MatchStarted() || IsDead()) return;
 	if (Attacking || Blocking) return;
 	AddMovementInput(GetActorForwardVector() * AxisValue);
 }
 
 void AArenaCharacter::MoveRight(float AxisValue)
 {
-	if (!GameMode->MatchStarted()) return;
+	if (!GameMode->MatchStarted() || IsDead()) return;
 	if (Attacking || Blocking) return;
 	AddMovementInput(GetActorRightVector() * AxisValue);
 }
 
 void AArenaCharacter::LookUp(float AxisValue)
 {
-	if (!GameMode->MatchStarted()) return;
+	if (!GameMode->MatchStarted() || IsDead()) return;
 	AddControllerPitchInput(AxisValue);
 }
 
 void AArenaCharacter::LookRight(float AxisValue)
 {
-	if (!GameMode->MatchStarted()) return;
+	if (!GameMode->MatchStarted() || IsDead()) return;
 	AddControllerYawInput(AxisValue);
 }
 
 void AArenaCharacter::LookUpRate(float AxisValue)
 {
-	if (!GameMode->MatchStarted()) return;
+	if (!GameMode->MatchStarted() || IsDead()) return;
 	AddControllerPitchInput(AxisValue * RotationRate * GetWorld()->GetDeltaSeconds());
 }
 
 void AArenaCharacter::LookRightRate(float AxisValue)
 {
-	if (!GameMode->MatchStarted()) return;
+	if (!GameMode->MatchStarted() || IsDead()) return;
 	AddControllerYawInput(AxisValue * RotationRate * GetWorld()->GetDeltaSeconds());
 }
 
