@@ -89,6 +89,7 @@ void AArenaWeapon::HitDetect()
 					}
 					
 					HitCharacter->PlayImpact();
+					HitCharacter->TakeStamina(StaminaCost);
 				}
 				else 
 				{
@@ -152,5 +153,25 @@ bool AArenaWeapon::HasShield()
 {
 	if (!OneHanded) return false;
 	return ShieldClass != nullptr;
+}
+
+float AArenaWeapon::GetStaminaAttackCost()
+{
+	return StaminaAttackCost;
+}
+
+float AArenaWeapon::GetStaminaBlockingStartCost()
+{
+	return StaminaBlockingStartCost;
+}
+
+float AArenaWeapon::GetStaminaBlockingCost()
+{
+	return StaminaBlockingCost;
+}
+
+float AArenaWeapon::GetStaminaCost()
+{
+	return StaminaCost;
 }
 

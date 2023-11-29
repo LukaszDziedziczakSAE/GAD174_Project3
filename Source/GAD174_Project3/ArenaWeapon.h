@@ -52,6 +52,18 @@ public:
 	UFUNCTION(BlueprintPure)
 	bool HasShield();
 
+	UFUNCTION(BlueprintPure)
+	float GetStaminaAttackCost();
+
+	UFUNCTION(BlueprintPure)
+	float GetStaminaBlockingStartCost();
+
+	UFUNCTION(BlueprintPure)
+	float GetStaminaBlockingCost();
+
+	UFUNCTION(BlueprintPure)
+	float GetStaminaCost();
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* Root;
@@ -103,4 +115,16 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AArenaShield> ShieldClass;
+
+	UPROPERTY(EditDefaultsOnly)
+	float StaminaAttackCost;
+
+	UPROPERTY(EditDefaultsOnly)
+	float StaminaBlockingStartCost;
+
+	UPROPERTY(EditDefaultsOnly)
+	float StaminaBlockingCost;
+
+	UPROPERTY(EditDefaultsOnly)
+	float StaminaCost;
 };

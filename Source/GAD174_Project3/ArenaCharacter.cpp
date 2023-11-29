@@ -54,6 +54,36 @@ void AArenaCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (!Running && !Attacking && !Blocking && Stamina < MaxStamina)
+	{
+		Stamina += StaminaRecovery * DeltaTime;
+	}
+
+	else if (Running)
+	{
+		if (Stamina > 0)
+		{
+			Stamina -= StaminaRunningCost * DeltaTime;
+		}
+		else
+		{
+			RunningStop();
+		}
+	}
+
+	else if (Blocking)
+	{
+		if (Stamina > 0)
+		{
+			Stamina -= Weapon->GetStaminaBlockingCost() * DeltaTime;
+		}
+		else
+		{
+			BlockStop();
+		}
+	}
+
+	if (Stamina < 0) Stamina = 0;
 }
 
 // Called to bind functionality to input
@@ -236,6 +266,10 @@ void AArenaCharacter::Attack()
 {
 	if (!GameMode->MatchStarted()) return;
 	if (Attacking || Blocking) return;
+
+	if (!HasEnoughStamina(Weapon->GetStaminaAttackCost())) return;
+
+	Stamina -= Weapon->GetStaminaAttackCost();
 	Attacking = true;
 
 	if (IsWeaponOneHanded())
@@ -265,8 +299,10 @@ void AArenaCharacter::Attack()
 void AArenaCharacter::BlockStart()
 {
 	if (!GameMode->MatchStarted()) return;
+	if (!HasEnoughStamina(Weapon->GetStaminaBlockingStartCost())) return;
 	//UE_LOG(LogTemp, Warning, TEXT("Block started"));
 	Blocking = true;
+	Stamina -= Weapon->GetStaminaBlockingStartCost();
 }
 
 void AArenaCharacter::BlockStop()
@@ -320,6 +356,27 @@ void AArenaCharacter::SetRunning(bool isRunning)
 	{
 		GetCharacterMovement()->MaxWalkSpeed = WalkingSpeed;
 	}
+}
+
+float AArenaCharacter::GetStaminaRecovery()
+{
+	return StaminaRecovery;
+}
+
+float AArenaCharacter::GetStaminaRunningCost()
+{
+	return StaminaRunningCost;
+}
+
+bool AArenaCharacter::HasEnoughStamina(float StaminaCost)
+{
+	return Stamina >= StaminaCost;
+}
+
+void AArenaCharacter::TakeStamina(float Amount)
+{
+	Stamina -= Amount;
+	if (Stamina < 0) Stamina = 0;
 }
 
 void AArenaCharacter::MoveForward(float AxisValue)
