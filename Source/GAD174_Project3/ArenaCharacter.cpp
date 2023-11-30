@@ -238,7 +238,7 @@ void AArenaCharacter::LeftFootstep()
 	{
 		if (GetMesh()->GetBoneLocation("ball_l").Equals(FVector::Zero()))
 		{
-			UE_LOG(LogTemp, Log, TEXT("%s unable to find bone ball_l"), *GetName());
+			UE_LOG(LogTemp, Error, TEXT("%s unable to find bone ball_l"), *GetName());
 		}
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), VFX_Footstep, GetMesh()->GetBoneLocation("ball_l"));
 	}
@@ -256,7 +256,7 @@ void AArenaCharacter::RightFootstep()
 	{
 		if (GetMesh()->GetBoneLocation("ball_r").Equals(FVector::Zero()))
 		{
-			UE_LOG(LogTemp, Log, TEXT("%s unable to find bone ball_r"), *GetName());
+			UE_LOG(LogTemp, Error, TEXT("%s unable to find bone ball_r"), *GetName());
 		}
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), VFX_Footstep, GetMesh()->GetBoneLocation("ball_r"));
 	}
