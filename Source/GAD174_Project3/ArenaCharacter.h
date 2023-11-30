@@ -187,7 +187,10 @@ private:
 	UAnimMontage* OneHandedBlockingImpactMontage;
 
 	UPROPERTY(EditDefaultsOnly)
-	UAudioComponent* Audio;
+	UAudioComponent* Voice;
+
+	UPROPERTY(EditDefaultsOnly)
+	UAudioComponent* Footstep;
 
 	UPROPERTY(EditDefaultsOnly)
 	USoundCue* GruntingAttackSound;

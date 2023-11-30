@@ -14,8 +14,11 @@ AArenaCharacter::AArenaCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	Audio = CreateDefaultSubobject<UAudioComponent>(TEXT("Audio"));
-	Audio->SetupAttachment(GetRootComponent());
+	Voice = CreateDefaultSubobject<UAudioComponent>(TEXT("Voice Audio"));
+	Voice->SetupAttachment(GetRootComponent());
+
+	Footstep = CreateDefaultSubobject<UAudioComponent>(TEXT("Footstep Audio"));
+	Footstep->SetupAttachment(GetRootComponent());
 
 	Health = 1;
 }
@@ -169,16 +172,16 @@ void AArenaCharacter::ApplyDamage(float Amount)
 		PlayImpact();
 		if (GruntingGotHitSound != nullptr)
 		{
-			Audio->SetSound(GruntingGotHitSound);
-			Audio->Play();
+			Voice->SetSound(GruntingGotHitSound);
+			Voice->Play();
 		}
 	}
 	else // Character is dead
 	{
 		if (DeathScreamSound != nullptr)
 		{
-			Audio->SetSound(DeathScreamSound);
-			Audio->Play();
+			Voice->SetSound(DeathScreamSound);
+			Voice->Play();
 		}
 
 		//UCapsuleComponent* capsule = GetCapsuleComponent();
@@ -238,8 +241,8 @@ void AArenaCharacter::LeftFootstep()
 
 	if (FootstepSound != nullptr)
 	{
-		Audio->SetSound(FootstepSound);
-		Audio->Play();
+		Footstep->SetSound(FootstepSound);
+		Footstep->Play();
 	}
 }
 
@@ -252,8 +255,8 @@ void AArenaCharacter::RightFootstep()
 
 	if (FootstepSound != nullptr)
 	{
-		Audio->SetSound(FootstepSound);
-		Audio->Play();
+		Footstep->SetSound(FootstepSound);
+		Footstep->Play();
 	}
 }
 
@@ -289,8 +292,8 @@ void AArenaCharacter::Attack()
 
 	if (GruntingAttackSound != nullptr)
 	{
-		Audio->SetSound(GruntingAttackSound);
-		Audio->Play();
+		Voice->SetSound(GruntingAttackSound);
+		Voice->Play();
 	}
 	
 	UE_LOG(LogTemp, Log, TEXT("%s attacked"), *GetName());
