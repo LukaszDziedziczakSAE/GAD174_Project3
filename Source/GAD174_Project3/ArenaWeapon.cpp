@@ -85,7 +85,7 @@ void AArenaWeapon::HitDetect()
 
 					if (VFX_HitMetal != nullptr)
 					{
-						UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), VFX_HitMetal, HitResult.Location);
+						UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), VFX_HitMetal, HitResult.Location, HitCharacter->GetActorRotation());
 					}
 					
 					HitCharacter->PlayImpact();
