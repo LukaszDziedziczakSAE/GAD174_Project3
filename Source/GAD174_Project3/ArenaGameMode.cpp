@@ -15,7 +15,7 @@ void AArenaGameMode::StartNextRound()
 		for (int index = 0; index < Enemies.Num(); index++)
 		{
 			Enemies[index]->GetWeapon()->Destroy();
-			Enemies[index]->GetShield()->Destroy();
+			if (Enemies[index]->GetShield() != nullptr) Enemies[index]->GetShield()->Destroy();
 			Enemies[index]->Destroy();
 		}
 		Enemies.Empty();
